@@ -4,45 +4,20 @@ on:
     branches:
       - master
 jobs:
-
-  build:
+  build-and-deploy:
     name: Build angular application
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
 
-      - name: checkout
-        uses: actions/checkout@v2
-
-      - name: build
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2-beta
         with:
-          node-version: 10.16
+          node-version: '12'
 
       - name: install dependancies
         run: npm install
-
       - name: build
         run: npm run build --prod
-
-      - name: upload artefacts
-        uses: actions/upload-artifact@master
-        with:
-          name: dist
-          path: dist
-
-  deploy:
-    name: deployt to firebase hosting
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: checkout
-        uses: actions/checkout@v2
-
-      - name: download artifact
-        uses: actions/download-artifact@master
-        with:
-          name: dist
 
       - name: send data to firebase
         uses: w9jds/firebase-action@master
@@ -50,4 +25,3 @@ jobs:
           args: deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-
