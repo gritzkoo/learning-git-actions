@@ -8,4 +8,9 @@ jobs:
     steps:
       - name: Testing 1
         run: echo "I'm working!!!"
+  testing-how-it-works2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Testing 2
+        run: echo "Now I'm getting serious!!!"
   
