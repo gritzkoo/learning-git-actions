@@ -1,0 +1,11 @@
+on: 
+  push:
+    branches:
+      - master
+jobs:
+  testing-how-it-works:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Testing 1
+        run: echo "I'm working!!!"
+  
