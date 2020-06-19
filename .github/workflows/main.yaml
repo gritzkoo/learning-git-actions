@@ -1,16 +1,49 @@
-on: 
+name: build and deploy
+on:
   push:
     branches:
       - master
 jobs:
-  testing-how-it-works:
+
+  build:
+    name: Build angular application
     runs-on: ubuntu-latest
     steps:
-      - name: Testing 1
-        run: echo "I'm working!!!"
-  testing-how-it-works2:
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: build
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.16
+
+      - name: install dependancies
+        run: npm install
+
+      - name: build
+        run: npm run build --prod
+
+      - name: upload artefacts
+        uses: actions/upload-artifact@master
+        with:
+          name: dist
+          path: dist
+
+  deploy:
+    name: deployt to firebase hosting
+    needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Testing 2
-        run: echo "Now I'm getting serious!!!"
-  
+      - name: download artifact
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+
+      - name: send data to firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          
