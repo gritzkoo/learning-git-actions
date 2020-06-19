@@ -35,6 +35,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+
+      - name: checkout
+        uses: actions/checkout@v2
+
       - name: download artifact
         uses: actions/download-artifact@master
         with:
@@ -46,4 +50,4 @@ jobs:
           args: deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          
+
